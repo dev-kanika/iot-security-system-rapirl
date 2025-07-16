@@ -18,9 +18,9 @@ This is a smart IoT-based home security system that integrates **mobile app cont
 | Folder | Description |
 |--------|-------------|
 | `mobile_app/` | APK, UI screenshots, app logic |
-| `raspberry_pi/` | Pi setup guide, hardware scripts |
-| `flask_api/` | REST API and ML models |
-| `rl_agents/` | FrozenLake and Bandit agents |
+| `raspberry_pi_setup/` | Pi setup guide, hardware scripts |
+| `backend/` | REST API and ML models |
+| `reinforcement_learning_models/` | FrozenLake and Bandit agents |
 | `final_integration/` | Test logs, demo, and assembly notes |
 | `docs/` | Final report, diagrams, and team task table |
 
