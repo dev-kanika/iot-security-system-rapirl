@@ -1,16 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
 import cv2
+import pyttsx3
+import torch
+import numpy as np
+from keras.models import load_model
+from keras.preprocessing.image import img_to_array
 
 cap = cv2.VideoCapture(1)  # or try 0 or 2 if 1 doesn't work
 ret, frame = cap.read()
@@ -21,17 +14,6 @@ else:
     print("Camera working! Frame shape:", frame.shape)
 
 cap.release()
-
-
-# In[ ]:
-
-
-import cv2
-import pyttsx3
-import torch
-import numpy as np
-from keras.models import load_model
-from keras.preprocessing.image import img_to_array
 
 # Load YOLOv5 for general object detection
 model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
@@ -97,16 +79,3 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-

@@ -1,16 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
+#suspicious_object.py
 
 import cv2
+import torch
+import time
+import pyttsx3
 
 cap = cv2.VideoCapture(1)  # or try 0 or 2 if 1 doesn't work
 ret, frame = cap.read()
@@ -21,15 +14,6 @@ else:
     print("Camera working! Frame shape:", frame.shape)
 
 cap.release()
-
-
-# In[ ]:
-
-
-import cv2
-import torch
-import time
-import pyttsx3
 
 engine = pyttsx3.init()
 model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
@@ -73,16 +57,3 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-

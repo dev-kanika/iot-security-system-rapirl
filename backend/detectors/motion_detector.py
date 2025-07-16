@@ -1,15 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
 import cv2
 import pyttsx3
 import datetime
@@ -23,10 +11,6 @@ else:
     print("Camera working! Frame shape:", frame.shape)
 
 cap.release()
-
-
-# In[ ]:
-
 
 engine = pyttsx3.init()
 engine.say("This is a test. Can you hear me?")
@@ -69,10 +53,4 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
-
-
-# In[ ]:
-
-
-
 

@@ -8,7 +8,8 @@ SCRIPTS = {
     "crowd": "crowd_density.py",
     "animal": "animal_intrusion.py",
     "object": "suspicious_object.py",
-    "motion": "motion_detector.py"
+    "motion": "motion_detector.py",
+    "face_mask": "facemask_detection.py",
 }
 
 @detector_bp.route("/<event>", methods=["GET"])
