@@ -1,9 +1,10 @@
 import cv2
 import torch
 import time
-import pyttsx3
+from utils.announcer import speak_alert
 
-cap = cv2.VideoCapture(1)  # or try 0 or 2 if 1 doesn't work
+
+cap = cv2.VideoCapture(0)  # or try 0 or 2 if 1 doesn't work
 ret, frame = cap.read()
 
 if not ret:
@@ -13,7 +14,6 @@ else:
 
 cap.release()
 
-engine = pyttsx3.init()
 model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
 
 cap = cv2.VideoCapture(0)
@@ -21,11 +21,6 @@ alert_given = False
 object_timer = {}
 
 ALERT_DURATION = 10  # seconds
-
-def speak_alert(msg):
-    print(f"[ALERT] {msg}")
-    engine.say(msg)
-    engine.runAndWait()
 
 while True:
     ret, frame = cap.read()
