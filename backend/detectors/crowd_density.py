@@ -26,7 +26,8 @@ get_ipython().run_line_magic('pip', 'install ultralytics')
 
 # Crowd Detection model
 # Load YOLOv5 pretrained model
-model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+# model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='models/crowd_detection_model.pt', source='local')
 
 cap = cv2.VideoCapture(0)
 

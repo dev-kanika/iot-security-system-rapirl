@@ -14,7 +14,8 @@ else:
 
 cap.release()
 
-model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+# model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='models/animal_intrusion_detection.pt', source='local')
 
 cap = cv2.VideoCapture(0)
 alert_given = False

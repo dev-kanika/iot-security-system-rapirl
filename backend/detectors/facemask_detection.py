@@ -16,7 +16,8 @@ else:
 cap.release()
 
 # Load YOLOv5 for general object detection
-model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+# model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='models/facemask_detection_model.pt', source='local')
 
 # Load Face Detector + Mask Classifier
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
