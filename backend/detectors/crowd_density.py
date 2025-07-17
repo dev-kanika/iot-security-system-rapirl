@@ -1,7 +1,7 @@
 import cv2
-import pyttsx3
 import torch
 import time
+from utils.announcer import speak_alert
 
 get_ipython().run_line_magic('pip', 'install opencv-python pyttsx3 torch torchvision')
 get_ipython().run_line_magic('pip', 'install --upgrade torch torchvision')
@@ -28,16 +28,10 @@ get_ipython().run_line_magic('pip', 'install ultralytics')
 # Load YOLOv5 pretrained model
 model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
 
-engine = pyttsx3.init()
 cap = cv2.VideoCapture(0)
 
 crowd_threshold = 3
 alert_given = False
-
-def speak_alert(msg):
-    print(f"[ALERT] {msg}")
-    engine.say(msg)
-    engine.runAndWait()
 
 while True:
     ret, frame = cap.read()

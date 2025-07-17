@@ -1,6 +1,7 @@
 import cv2
 import pyttsx3
 import datetime
+from utils.announcer import speak_alert
 
 cap = cv2.VideoCapture(1)  # or try 0 or 2 if 1 doesn't work
 ret, frame = cap.read()
@@ -16,18 +17,12 @@ engine = pyttsx3.init()
 engine.say("This is a test. Can you hear me?")
 engine.runAndWait()
 
-engine = pyttsx3.init()
 cap = cv2.VideoCapture(0)
 
 ret, frame1 = cap.read()
 ret, frame2 = cap.read()
 
 alert_given = False
-
-def speak_alert(msg):
-    print(f"[ALERT] {msg}")
-    engine.say(msg)
-    engine.runAndWait()
 
 def in_restricted_hours():
     return True

@@ -1,9 +1,9 @@
 import cv2
-import pyttsx3
 import torch
 import numpy as np
 from keras.models import load_model
 from keras.preprocessing.image import img_to_array
+from utils.announcer import speak_alert
 
 cap = cv2.VideoCapture(1)  # or try 0 or 2 if 1 doesn't work
 ret, frame = cap.read()
@@ -27,11 +27,6 @@ engine = pyttsx3.init()
 
 cap = cv2.VideoCapture(0)
 crowd_threshold = 3
-
-def speak_alert(msg):
-    print(f"[ALERT] {msg}")
-    engine.say(msg)
-    engine.runAndWait()
 
 while True:
     ret, frame = cap.read()
