@@ -4,7 +4,7 @@ import time
 from utils.announcer import speak_alert
 
 
-cap = cv2.VideoCapture(1)  # or try 0 or 2 if 1 doesn't work
+cap = cv2.VideoCapture(0)  # or try 0 or 2 if 1 doesn't work
 ret, frame = cap.read()
 
 if not ret:
