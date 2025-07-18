@@ -1,0 +1,73 @@
+{
+	"info": {
+		"_postman_id": "1b9f0f39-117e-4aaf-9639-6243d352af7d",
+		"name": "IOT_Mobile_APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Image",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/arishpanjwani/Loyalist_Workspace/iot-security-system-rapi-rl/backend/data/doorbell.wav"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5050/upload_audio",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5050",
+					"path": [
+						"upload_audio"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Audio",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/arishpanjwani/Loyalist_Workspace/iot-security-system-rapi-rl/backend/data/doorbell.wav"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5050/upload_audio",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5050",
+					"path": [
+						"upload_audio"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
