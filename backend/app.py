@@ -1,24 +1,37 @@
 from flask import Flask
 from routes.audio_route import audio_bp
 from routes.image_route import image_bp
-from routes.detector_routes import detector_bp
-from routes.system_routes import system_bp
 
 def create_app():
     app = Flask(__name__)
+    app.register_blueprint(audio_bp)  # No prefix, so route is /audio
+    app.register_blueprint(image_bp)  # No prefix, so route is /detect
 
-    # Register Blueprints from each route module
-    app.register_blueprint(audio_bp, url_prefix='/predict')
-    app.register_blueprint(image_bp, url_prefix='/predict')
-    app.register_blueprint(detector_bp, url_prefix='/detect')
-    app.register_blueprint(system_bp, url_prefix='/')
-
-    @app.route("/")
     def index():
-        return "\ud83d\udd10 IoT Event Detection Backend is Live"
+        return "IoT Event Detection Backend is Live"
+
+    @app.route("/start_monitoring", methods=["POST"])
+    def start_monitoring():
+        return "abc Monitoring started"
+
+    @app.route("/stop_monitoring", methods=["POST"])
+    def stop_monitoring():
+        return "Monitoring stopped"
+
+    @app.route("/check_alerts", methods=["GET"])
+    def check_alerts():
+        return "No alerts"
+
+    @app.route("/status", methods=["GET"])
+    def status():
+        return "System Online"
+
+    @app.route("/heartbeat", methods=["POST"])
+    def heartbeat():
+        return "Heartbeat received"
 
     return app
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5050, debug=True)

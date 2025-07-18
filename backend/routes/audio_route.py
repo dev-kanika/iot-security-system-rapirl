@@ -1,48 +1,64 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 import librosa
 import numpy as np
 import joblib
 import os
-from datetime import datetime
-from utils.logger import log_event
+from werkzeug.utils import secure_filename
+from config.events import EVENTS
 
-AUDIO_MODEL_PATH = os.path.join("models", "audio_model.pkl")
-audio_model = joblib.load(AUDIO_MODEL_PATH)
+audio_bp = Blueprint('audio_bp', __name__)
 
+# Load model once
+model = joblib.load("models/audio_model.pkl")
+
+# Label-to-event mapping (match index with model output)
 label_map = {
-    0: "Baby crying detected. Notifying guardian.",
-    1: "Doorbell detected. Please check the entrance.",
-    2: "Fire alarm detected! Evacuate immediately.",
-    3: "Possible intrusion detected! Alerting security.",
-    4: "Gunshot detected! Take cover and call emergency services."
+    0: EVENTS["audio"]["BABY_CRYING"],
+    1: EVENTS["audio"]["DOORBELL"],
+    2: EVENTS["audio"]["FIRE_ALARM"],
+    3: EVENTS["audio"]["MOTION_DETECTED"],  # Replacing intrusion with "Motion Detected"
+    4: EVENTS["audio"]["GUNSHOT"]
 }
 
+# Extract MFCC features
 def extract_features(file_path):
     y, sr = librosa.load(file_path, sr=16000, mono=True)
     mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
     return np.mean(mfcc.T, axis=0)
 
-audio_bp = Blueprint("audio", __name__)
+# Prediction Endpoint
+@audio_bp.route('/upload_audio', methods=['POST'])
+def predict_audio_event():
+    print("\n=== AUDIO UPLOAD ENDPOINT HIT ===")
 
-@audio_bp.route("/audio", methods=["POST"])
-def predict_audio():
-    if 'audio_file' not in request.files:
-        return jsonify({"error": "No audio file provided."}), 400
+    # Validate uploaded file
+    if 'file' not in request.files:
+        print("❌ 'file' not found in request.files")
+        return "No audio file provided", 400
 
-    file = request.files['audio_file']
-    temp_path = os.path.join("temp_audio.wav")
+    file = request.files['file']
+    filename = secure_filename(file.filename)
+    temp_path = os.path.join("temp_audio", filename)
+    os.makedirs("temp_audio", exist_ok=True)
     file.save(temp_path)
 
     try:
+        # Extract features and predict
         features = extract_features(temp_path).reshape(1, -1)
-        pred = audio_model.predict(features)[0]
-        message = label_map.get(pred, "Unknown sound detected.")
+        pred = model.predict(features)[0]
+        print(f"🧠 Model Prediction: {pred}")
 
-        log_event("audio", label_map.get(pred, "Unknown"))
-        return jsonify({"prediction": int(pred), "message": message})
+        # Return mapped message or fallback
+        message = label_map.get(pred, "Unknown sound detected.")
+        return message, 200
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print(f"❗ Error during prediction: {e}")
+        return str(e), 500
+
     finally:
-        if os.path.exists(temp_path):
+        try:
             os.remove(temp_path)
+            print(f"🧹 Temp file deleted: {temp_path}")
+        except Exception as cleanup_error:
+            print(f"⚠️ Cleanup error: {cleanup_error}")
