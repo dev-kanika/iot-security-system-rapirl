@@ -1,70 +1,157 @@
-#  Smart Event Detection System with Raspberry Pi & Computer Vision
+# 🧠 Smart Event Detection Backend (Flask + YOLOv5 + Audio)
 
-This project is part of **IoT Case Study 2 (RaPiRL)** and implements **real-time event detection** using a webcam and YOLOv5, with alerts announced through a speaker. It focuses on enhancing surveillance and safety in smart environments using Raspberry Pi.
+This is the **Flask-based backend** for the Smart Event Detection System. It processes image and audio data using machine learning models to detect events such as crowd density, animal intrusion, suspicious objects, face mask violations, and emergency audio cues like fire alarms and gunshots.
 
-## ✅ Features Implemented
+---
 
-###  Real-time Event Detection (with Audio Alerts)
-The following models are implemented in Python using OpenCV, PyTorch, and `pyttsx3`:
+## ✅ Features
 
-| Task | Description | Triggered Announcement |
-|------|-------------|------------------------|
-| 👥 Crowd Density Monitoring | Detects if number of people exceeds a threshold | “High crowd density detected. Maintain social distancing.” |
-|     Face Mask detection |  Detects if person wears mask or not | if not then instruct please wear mask.
-| 📦 Suspicious Object Detection | Detects unattended or unknown objects in a zone | “Unattended object detected. Please inspect.” |
-| 🐶 Animal Intrusion Detection | Detects animals like dogs, cats, etc. in restricted areas | “Animal intrusion detected! Stay alert.” |
-| 🕵️ Motion Detection in Restricted Hours | Detects motion during night/off-hours | “Unauthorized movement detected! Security alert triggered.” |
+| Type   | Detection | Description |
+|--------|-----------|-------------|
+| 📸 Image | Crowd Density | Detects if too many people are present |
+| 📸 Image | Animal Intrusion | Detects animals like dogs, cats, etc. |
+| 📸 Image | Suspicious Objects | Detects unknown/unattended objects |
+| 📸 Image | Face Mask | Detects if face masks are missing |
+| 🔊 Audio | Fire Alarm | Detects loud alarm sounds |
+| 🔊 Audio | Glass Break | Intruder Alert |
+| 🔊 Audio | Baby Crying | Detects a crying baby |
+| 🔊 Audio | Doorbell | Detects doorbell ringing |
+| 🔊 Audio | Gunshot | Detects gunshots |
 
-Each model uses a `alert_given` reset logic to enable **multiple alerts** if the condition reoccurs after being resolved.
+> Returns one string-based alert per request — based on priority:
+> **Crowd > Animal > Suspicious > No Mask** (for image)
 
 ---
 
 ## 🧠 Tech Stack
 
-- 🐍 Python
-- 🎥 OpenCV
-- 🧠 YOLOv5 (torch.hub)
-- 🗣️ pyttsx3 (Text-to-Speech)
-- 🧠 Pre-trained models used directly from `ultralytics/yolov5`
-
-- 
----
-
-## 🧑‍💻 Flask Integration (To Be Done by Collaborator)
-
-### What Needs to Be Done
-
-Your job is to wrap each event detection model into **Flask APIs** so that they can be triggered from a web/mobile frontend or dashboard.
-
-#### Suggested API Structure
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/detect/crowd` | GET or POST | Start crowd detection camera stream |
-| `/detect/animal` | GET or POST | Start animal intrusion detection |
-| `/detect/object` | GET or POST | Start suspicious object detection |
-| `/detect/motion` | GET or POST | Start motion detection in restricted hours |
-| `/stop` | POST | Stop the camera/detection service |
-
-#### How to Proceed
-
-1. Use **Flask or FastAPI** to create endpoints.
-2. Import each detection script and run it as a subprocess or thread.
-3. Return a success message (or logs/stats) from the API call.
-4. Make sure the camera resource isn’t shared across concurrent endpoints.
+- 🐍 Python 3.11+
+- 🧠 YOLOv5 (`torch.hub`)
+- 🔉 Librosa (audio preprocessing)
+- 🧪 scikit-learn (audio classification)
+- 🖼 OpenCV (image processing)
+- 😷 Keras (`.keras` Face Mask Model)
+- 🌐 Flask (REST API)
 
 ---
 
-## 📝 Example (crowd_density.py wrapped into Flask)
+## 📦 Folder Structure (Backend)
+
+```
+
+backend/
+├── app.py                        # Main Flask application
+├── data/                         # Image and Audio for testing
+├── routes/
+│   ├── audio\_route.py            # Handles /upload\_audio
+│   ├── image\_route.py            # Handles /upload\_image
+├── models/
+│   ├── audio\_model.pkl           # Trained audio classifier
+│   ├── mask\_detector.keras       # Face mask classifier (Keras)
+│   └── multi\_detector.pt         # YOLOv5 multi-class model
+├── haarcascade\_frontalface\_default.xml  # For face detection
+├── temp\_audio/                   # Temporary audio file storage
+├── utils/
+│   └── announcer.py               # (Optional) Speaker integration
+├── requirements.txt               # Libraries used
+└── README.md
+
+````
+
+---
+
+## ⚙️ Setup & Run Instructions
+
+### 1. Install Dependencies
+
+```bash
+cd backend
+pip install -r requirements.txt
+````
+
+### 2. Run Flask Server
+
+```bash
+python app.py
+```
+
+> Server runs at: `http://0.0.0.0:5050`               # Update with your ip address and port
+
+---
+
+## 🔧 API Endpoints
+
+### 📸 Image Event Detection
+
+```
+POST /upload_image
+Content-Type: multipart/form-data
+Form field: image = <your image file>
+```
+
+✅ Example response:
+
+```
+"Animal intrusion detected."
+```
+
+### 🔊 Audio Event Detection
+
+```
+POST //upload_audio
+Content-Type: multipart/form-data
+Form field: file = <your audio file>
+```
+
+✅ Example response:
+
+```
+"Fire alarm detected! Evacuate now!"
+```
+
+---
+
+## 🔁 Event Mapping (Internal Reference)
 
 ```python
-@app.route("/detect/crowd", methods=["GET"])
-def detect_crowd():
-    subprocess.Popen(["python", "crowd_density.py"])
-    return jsonify({"status": "Crowd detection started"})
-
+EVENTS = {
+    "photo": {
+        "CROWD_DENSITY": "High crowd density detected.",
+        "ANIMAL_DETECTED": "Animal intrusion detected.",
+        "SUSPICIOUS_OBJECT": "Suspicious object detected.",
+        "NO_MASK": "Face mask not detected."
+    },
+    "audio": {
+        "FIRE_ALARM": "Fire alarm detected! Evacuate now!",
+        "GLASS_BREAKING": "Glass breaking detected!",
+        "BABY_CRYING": "Baby crying detected.",
+        "DOORBELL": "Doorbell sound detected.",
+        "GUNSHOT": "Gunshot detected! Call emergency services.",
+        "MOTION_DETECTED": "Possible intrusion detected during restricted hours."
+    }
+}
+```
 
 ---
 
-## 📂 Folder Structure
+## 📌 Notes
 
+* Make sure the model files are placed in the `/models/` directory:
+
+  * `multi_detector.pt`
+  * `audio_model.pkl`
+  * `mask_detector.keras`
+* `haarcascade_frontalface_default.xml` is required for face detection.
+* All requests return **only one** string response per request — based on priority logic.
+
+---
+
+## 🧹 Clean-up
+
+Temporary uploaded audio files are automatically deleted after processing. No database or stateful storage is used in the backend.
+
+---
+
+## 📄 License
+
+This backend code is licensed for educational and research purposes only. Ensure third-party model usage complies with their respective licenses.
