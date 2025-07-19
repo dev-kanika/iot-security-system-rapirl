@@ -1,3 +1,6 @@
+## Demo
+📺 [Watch the demo video here](https://youtu.be/CZSqJ9WhAtU)
+
 # 🔐 IoT Security System with Reinforcement Learning
 
 This is a smart IoT-based home security system that integrates **mobile app controls**, **Raspberry Pi hardware**, **Flask-based AI processing**, and **Reinforcement Learning agents** for intelligent decision-making.
@@ -30,6 +33,3 @@ This is a smart IoT-based home security system that integrates **mobile app cont
 > 12-member team: App dev, Pi config, API/AI, RL and final integration.
 
 ---
-
-## Demo
-📺 [Watch the demo video here](https://youtu.be/CZSqJ9WhAtU)
