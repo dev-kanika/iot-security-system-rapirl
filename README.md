@@ -32,4 +32,4 @@ This is a smart IoT-based home security system that integrates **mobile app cont
 ---
 
 ## Demo
-📺 [Watch the demo video here]([https://link-to-video.com](https://github.com/dev-kanika/iot-security-system-rapirl/blob/main/Demo%20Video.mp4]))
+📺 [Watch the demo video here]([https://github.com/dev-kanika/iot-security-system-rapirl/blob/main/Demo%20Video.mp4]))
