@@ -40,20 +40,20 @@ This is the **Flask-based backend** for the Smart Event Detection System. It pro
 ```
 
 backend/
-├── app.py                        # Main Flask application
-├── data/                         # Image and Audio for testing
+├── app.py                                    # Main Flask application
+├── data/                                     # Image and Audio for testing
 ├── routes/
-│   ├── audio\_route.py            # Handles /upload\_audio
-│   ├── image\_route.py            # Handles /upload\_image
+│   ├── audio\_route.py                        # Handles /upload\_audio
+│   ├── image\_route.py                        # Handles /upload\_image
 ├── models/
-│   ├── audio\_model.pkl           # Trained audio classifier
-│   ├── mask\_detector.keras       # Face mask classifier (Keras)
-│   └── multi\_detector.pt         # YOLOv5 multi-class model
-├── haarcascade\_frontalface\_default.xml  # For face detection
-├── temp\_audio/                   # Temporary audio file storage
+│   ├── audio\_model.pkl                       # Trained audio classifier
+│   ├── mask\_detector.keras                   # Face mask classifier (Keras)
+│   └── multi\_detector.pt                     # YOLOv5 multi-class model
+├── haarcascade\_frontalface\_default.xml      # For face detection
+├── temp\_audio/                               # Temporary audio file storage
 ├── utils/
-│   └── announcer.py               # (Optional) Speaker integration
-├── requirements.txt               # Libraries used
+│   └── announcer.py                           # (Optional) Speaker integration
+├── requirements.txt                           # Libraries used
 └── README.md
 
 ````
