@@ -12,3 +12,7 @@ torch==2.2.0
 ultralytics
 keras
 tensorflow
+base64
+json
+re
+datetime
